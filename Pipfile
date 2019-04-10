@@ -16,12 +16,14 @@ mysqlclient = "==1.4.1"
 "mmh3" = "*"
 aiohttp = "*"
 flask = "==1.0.2"
-arxiv-base = "==0.15.3"
 validators = "*"
 mypy-extensions = "*"
 flask-wtf = "*"
 arxiv-auth = "==0.3.1"
 mypy = "*"
+#TODO: need to increment this to new base after it is minted
+base = {git = "https://github.com/arXiv/arxiv-base.git",editable = true,ref = "ARXIVNG-2049"}
+pipenv = "*"
 
 [dev-packages]
 pylama = "*"
