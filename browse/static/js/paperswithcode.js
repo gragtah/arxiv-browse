@@ -31,23 +31,18 @@
     pwc: '<svg xmlns="http://www.w3.org/2000/svg" class="pwc-icon pwc-icon-primary" viewBox="0 0 512 512" ><path stroke="#21cbce" fill="#21cbce" d="M88 128h48v256H88zM232 128h48v256h-48zM160 144h48v224h-48zM304 144h48v224h-48zM376 128h48v256h-48z"></path><path stroke="#21cbce" fill="#21cbce" d="M104 104V56H16v400h88v-48H64V104zM408 56v48h40v304h-40v48h88V56z"></path></svg>'
   }
 
-  function renderPWCSectionTitle($output) {
-    const titleExists = !!$('#pwc-title').length
-
-    if(!titleExists) $output.append('<h2 id="pwc-title">Papers With Code</h2>')
-  }
-
   async function renderCode ($output, data) {
     $output.html('');
+    $output.append('<h2>Papers With Code</h2>')
     if (data === null) {
-      renderPWCSectionTitle($output)
-
       $output.append('<p>This paper has not been found in the Papers with Code database. If you are one of the registered authors of this paper, you can link your code and data on your <a href="https://arxiv.org/user">arxiv user page</a></p>');
       return
     }
-    if (data.error) return;
+    if (data.error) {
+      $output.html(''); // remove section title if there's an error
+      return
+    };
 
-    renderPWCSectionTitle($output)
     $output.append('<h3>Official Code</h3>');
 
     if (data.all_official.length > 0) {
@@ -209,8 +204,6 @@
       $outputData.attr("style", "display:none");
       return;
     }
-
-    renderPWCSectionTitle($output)
 
     $output.append('<h3>Datasets Used</h3>');
 
