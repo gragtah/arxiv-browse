@@ -17,61 +17,38 @@
   }
 
   const fetchCatalyzeXCode = async () => {
-    const controller = new AbortController();
-    var response = null
+    const cxApiUrl = `https://www.catalyzex.com/api/code?extension=true&paper_arxiv_id=${arxivId}`;
+
+    let result;
+
     try {
-      setTimeout(() => controller.abort(), 2000);
-      response = await fetch('https://www.catalyzex.com/api/code?' + new URLSearchParams({
-        'extension': 'true',
-        'paper_arxiv_id': arxivId
-      }), {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          'Access-Control-Allow-Origin': '*'
-        },
-        signal: controller.signal
-      } ).then( response => {
-        if (response.ok) {
-          return response.json();
-        } else {
-          return false;
-        }
-      }).catch( err => {
-        console.clear();
-      });
-    } catch (err) {
-      console.log(err)
+      result = await $.ajax({ url: cxApiUrl, timeout: 2000, dataType: 'json' })
+    } catch (error) {
+      result = null;
     }
 
-    return response;
+    return result
   }
 
   $output.html('');
 
   const catalyzeXCode = await fetchCatalyzeXCode()
-
   const codeUrl = catalyzeXCode ? catalyzeXCode.code_url : ''
 
   $output.append('<h2>CatalyzeX</h2>')
 
   if(codeUrl) {
     const codeLink = $('<a target="_blank"></a>');
-
     codeLink.attr('href', codeUrl);
-
     codeLink
     .append(icons.github)
     .append(codeUrl)
 
     $output.append(codeLink);
-
     $output.append(' and ')
 
     const catalyzeXLink = $('<a target="_blank"></a>')
-
     catalyzeXLink.attr('href', `https://www.catalyzex.com/paper/arxiv:${arxivId}/code`);
-
     catalyzeXLink
     .append('more code implementations found on')
     .append(icons.catalyzex)
@@ -79,12 +56,11 @@
 
     $output.append(catalyzeXLink)
   } else {
-    const catalyzeXLink = $('<a target="_blank"></a>');
-
     $output
      .append('Submit your implementations of this paper on')
      .append(icons.catalyzex);
 
+    const catalyzeXLink = $('<a target="_blank"></a>');
     catalyzeXLink.attr('href', `https://www.catalyzex.com/paper/arxiv:${arxivId}`);
     catalyzeXLink.append('CatalyzeX');
 
