@@ -31,7 +31,7 @@
     pwc: '<svg xmlns="http://www.w3.org/2000/svg" class="pwc-icon pwc-icon-primary" viewBox="0 0 512 512" ><path stroke="#21cbce" fill="#21cbce" d="M88 128h48v256H88zM232 128h48v256h-48zM160 144h48v224h-48zM304 144h48v224h-48zM376 128h48v256h-48z"></path><path stroke="#21cbce" fill="#21cbce" d="M104 104V56H16v400h88v-48H64V104zM408 56v48h40v304h-40v48h88V56z"></path></svg>'
   }
 
-  async function renderCode ($output, data) {
+  function renderCode ($output, data) {
     $output.html('');
     $output.append('<h2>Papers With Code</h2>')
     if (data === null) {
@@ -76,36 +76,33 @@
         .append(link);
     } else {
       $output.append('<h3 class="pwc-community-code">Community Code</h3>');
-      if (data.unofficial_count > 0) {
-        let p = $('<p>');
-        let link = $('<a class="pwc-code-link" target="_blank"></a>');
-        link.attr('href', data.paper_url);
-        link
-          .append(icons.pwc)
-          .append(document.createTextNode(data.unofficial_count))
-          .append(` code implementation${data.unofficial_count > 1 ? 's': ''}`);
+      let link = $('<a class="pwc-code-link" target="_blank"></a>');
+      link.attr('href', data.paper_url);
+      link
+        .append(icons.pwc)
+        .append(document.createTextNode(data.unofficial_count))
+        .append(` code implementation${data.unofficial_count > 1 ? 's': ''}`);
 
-        if (data.frameworks.length === 1) {
-          link
-            .append(' (in ')
-            .append(document.createTextNode(data.frameworks[0]))
-            .append(')');
-        } else if (data.frameworks.length === 2) {
-          link
-            .append(' (in ')
-            .append(document.createTextNode(data.frameworks.join(' and ')))
-            .append(')');
-        } else if (data.frameworks.length > 2) {
-          link
-            .append(' (in ')
-            .append(document.createTextNode(data.frameworks.slice(0, -1).join(', ')))
-            .append(' and ')
-            .append(document.createTextNode(data.frameworks[data.frameworks.length - 1]))
-            .append(')');
-        }
-        p.append(link)
-        $output.append(p);
+      if (data.frameworks.length === 1) {
+        link
+          .append(' (in ')
+          .append(document.createTextNode(data.frameworks[0]))
+          .append(')');
+      } else if (data.frameworks.length === 2) {
+        link
+          .append(' (in ')
+          .append(document.createTextNode(data.frameworks.join(' and ')))
+          .append(')');
+      } else if (data.frameworks.length > 2) {
+        link
+          .append(' (in ')
+          .append(document.createTextNode(data.frameworks.slice(0, -1).join(', ')))
+          .append(' and ')
+          .append(document.createTextNode(data.frameworks[data.frameworks.length - 1]))
+          .append(')');
       }
+
+      $output.append(link);
     }
   }
 
