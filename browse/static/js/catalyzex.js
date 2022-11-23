@@ -19,12 +19,12 @@
   const fetchCatalyzeXCode = async () => {
     const cxApiUrl = `https://www.catalyzex.com/api/code?extension=true&paper_arxiv_id=${arxivId}`;
 
-    let result;
+    let result = {};
 
     try {
       result = await $.ajax({ url: cxApiUrl, timeout: 2000, dataType: 'json' })
     } catch (error) {
-      result = null;
+      result = {};
     }
 
     return result
@@ -32,29 +32,20 @@
 
   $output.html('');
 
-  const catalyzeXCode = await fetchCatalyzeXCode()
-  const codeUrl = catalyzeXCode ? catalyzeXCode.code_url : ''
+  const { count: implementations, cx_url: cxImplementationsUrl } = await fetchCatalyzeXCode()
 
   $output.append('<h2>CatalyzeX</h2>')
 
-  if(codeUrl) {
+  if(implementations) {
     const codeLink = $('<a target="_blank"></a>');
-    codeLink.attr('href', codeUrl);
+    codeLink.attr('href', cxImplementationsUrl);
     codeLink
     .append(icons.github)
-    .append(codeUrl)
-
-    $output.append(codeLink);
-    $output.append(' and ')
-
-    const catalyzeXLink = $('<a target="_blank"></a>')
-    catalyzeXLink.attr('href', `https://www.catalyzex.com/paper/arxiv:${arxivId}/code`);
-    catalyzeXLink
-    .append('more code implementations found on')
+    .append(`${implementations} code implementation${implementations > 1 ? 's': ''} found on`)
     .append(icons.catalyzex)
     .append('CatalyzeX')
 
-    $output.append(catalyzeXLink)
+    $output.append(codeLink);
   } else {
     $output
      .append('Submit your implementations of this paper on')
