@@ -17,7 +17,7 @@
   }
 
   const fetchCatalyzeXCode = async () => {
-    const cxApiUrl = `http://localhost:3000/api/code?extension=true&paper_arxiv_id=${arxivId}`;
+    const cxApiUrl = `https://catalyzex.com/api/code?extension=true&paper_arxiv_id=${arxivId}`;
 
     let result = {};
 
