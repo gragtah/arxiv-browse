@@ -31,6 +31,9 @@ $(document).ready(function() {
       "container": "#coreRecommenderOutput"
     }
   };
+  
+  var pwcEnabled = true;
+
 
   var labsCookie = Cookies.getJSON("arxiv_labs");
   if (labsCookie) {

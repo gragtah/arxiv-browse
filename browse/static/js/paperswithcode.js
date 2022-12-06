@@ -33,15 +33,11 @@
 
   function renderCode ($output, data) {
     $output.html('');
-    $output.append('<h2>Papers With Code</h2>')
     if (data === null) {
-      $output.append('<p>This paper has not been found in the Papers with Code database. If you are one of the registered authors of this paper, you can link your code and data on your <a href="https://arxiv.org/user">arxiv user page</a></p>');
+      $output.html('<p>This paper has not been found in the Papers with Code database. If you are one of the registered authors of this paper, you can link your code and data on your <a href="https://arxiv.org/user">arxiv user page</a></p>');
       return
     }
-    if (data.error) {
-      $output.html(''); // remove section title if there's an error
-      return
-    };
+    if (data.error) return;
 
     $output.append('<h3>Official Code</h3>');
 
