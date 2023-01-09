@@ -1,10 +1,11 @@
 (async () => {
-  const arxivId = window.location.pathname.split('/').reverse()[0];
-  const $output = $('#catalyzex-output');
+  const arxivId = window.location.pathname.split("/").reverse()[0];
+  const paperTitle = document.querySelector("h1.title")?.innerText;
+  const $output = $("#catalyzex-output");
 
-  if ($output.html() != '') {
+  if ($output.html() != "") {
     // Toggled off
-    $output.html('');
+    $output.html("");
     $output.attr("style", "display:none");
     return;
   } else {
@@ -22,39 +23,37 @@
     let result = {};
 
     try {
-      result = await $.ajax({ url: cxApiUrl, timeout: 2000, dataType: 'json' })
+      result = await $.ajax({ url: cxApiUrl, timeout: 2000, dataType: "json" });
     } catch (error) {
       result = {};
     }
 
-    return result
-  }
+    return result;
+  };
 
   $output.html('');
 
   const { count: implementations, cx_url: cxImplementationsUrl } = await fetchCatalyzeXCode()
 
-  $output.append('<h2>CatalyzeX</h2>')
+  $output.append("<h2>CatalyzeX</h2>");
 
-  if(implementations) {
-    const codeLink = $('<a target="_blank"></a>');
-    codeLink.attr('href', cxImplementationsUrl);
+  const submitItHereLink = `<a target="_blank" href="https://www.catalyzex.com/add_code">submit it here</a>`;
+
+  if (implementations) {
+    const codeLink = $(`<a target="_blank"></a>`);
+    codeLink.attr("href", cxImplementationsUrl);
     codeLink
-    .append(icons.github)
-    .append(`${implementations} code implementation${implementations > 1 ? 's': ''} found on`)
-    .append(icons.catalyzex)
-    .append('CatalyzeX')
+      .append(icons.github)
+      .append(`${implementations} code implementation${implementations > 1 ? "s" : ""} found on`)
+      .append(icons.catalyzex)
+      .append("CatalyzeX");
 
-    $output.append(codeLink);
-  } else {
     $output
-     .append('Submit your implementations of this paper on')
-     .append(icons.catalyzex);
+      .append(codeLink)
+      .append($(`<p>If you have code to share with the community, please ${submitItHereLink}.</p>`))
+  } else {
+    $output.append(`<p>The authors of ${paperTitle ? `"${paperTitle}"` : 'this paper'} have not publicly listed the code yet. If you have code to share with the community, please ${submitItHereLink}.</p>`)
+  }
 
-    const catalyzeXLink = $('<a target="_blank"></a>');
-    catalyzeXLink.attr('href', `https://www.catalyzex.com/paper/arxiv:${arxivId}`);
-    catalyzeXLink.append('CatalyzeX');
-
-    $output.append(catalyzeXLink);
-  };
-})()
+  $output.append($("<p>The code you add will be listed publicly for all developers & researchers and helps advance technological progress!</p>"))
+})();
