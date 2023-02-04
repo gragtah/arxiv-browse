@@ -60,5 +60,5 @@
     $output.append(`<p>No code found just yet. If you have code to share with the community, please ${submitItHereLink}.</p>`)
   }
 
-  $output.append($("<p>The code you add will be listed publicly for all developers & researchers and helps advance technological progress!</p>"))
+  $output.append($("<p>The code you add will be listed publicly for all researchers & engineers and helps advance technological progress!</p>"))
 })();
