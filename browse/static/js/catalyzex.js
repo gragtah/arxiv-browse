@@ -42,7 +42,7 @@
   addCodeURL.searchParams.set('title', paperTitle);
   addCodeURL.searchParams.set('paper_url', paperUrl);
 
-  const submitItHereLink = `<a target="_blank" href="${addCodeURL}">submit it here</a>`;
+  const submitItHereLink = `<a target="_blank" href="${addCodeURL}" style="font-weight:bold">submit it here</a>`;
 
   if (implementations) {
     const codeLink = $(`<a target="_blank"></a>`);
