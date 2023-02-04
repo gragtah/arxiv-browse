@@ -57,7 +57,7 @@
       .append(codeLink)
       .append($(`<p>If you have code to share with the community, please ${submitItHereLink}.</p>`))
   } else {
-    $output.append(`<p>The authors of ${paperTitle ? `"${paperTitle}"` : 'this paper'} have not publicly listed the code yet. If you have code to share with the community, please ${submitItHereLink}.</p>`)
+    $output.append(`<p>No code found just yet. If you have code to share with the community, please ${submitItHereLink}.</p>`)
   }
 
   $output.append($("<p>The code you add will be listed publicly for all developers & researchers and helps advance technological progress!</p>"))
