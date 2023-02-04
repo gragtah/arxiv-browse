@@ -1,7 +1,7 @@
 (async () => {
   const arxivId = window.location.pathname.match(/(?:abs|pdf)\/(.+\d{3})/)[1];
   const paperTitle = document.querySelector("h1.title")?.innerText;
-  const paperUrl = window.location.href;
+  const paperUrl = window.location.href.split('?')[0];
   const $output = $("#catalyzex-output");
 
   if ($output.html() != "") {
@@ -60,5 +60,5 @@
     $output.append(`<p>No code found just yet. If you have code to share with the community, please ${submitItHereLink}.</p>`)
   }
 
-  $output.append($("<p>The code you add will be listed publicly for all developers & researchers and helps advance technological progress!</p>"))
+  $output.append($("<p>The code you add will be listed publicly for all researchers & engineers and helps advance technological progress!</p>"))
 })();
