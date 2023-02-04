@@ -1,5 +1,5 @@
 (async () => {
-  const arxivId = window.location.pathname.split("/").reverse()[0];
+  const arxivId = window.location.pathname.match(/(?:abs|pdf)\/(.+\d{3})/)[1];
   const paperTitle = document.querySelector("h1.title")?.innerText;
   const $output = $("#catalyzex-output");
 
