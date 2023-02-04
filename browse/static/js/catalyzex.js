@@ -1,6 +1,7 @@
 (async () => {
   const arxivId = window.location.pathname.match(/(?:abs|pdf)\/(.+\d{3})/)[1];
   const paperTitle = document.querySelector("h1.title")?.innerText;
+  const paperUrl = window.location.href;
   const $output = $("#catalyzex-output");
 
   if ($output.html() != "") {
@@ -37,7 +38,11 @@
 
   $output.append("<h2>CatalyzeX</h2>");
 
-  const submitItHereLink = `<a target="_blank" href="https://www.catalyzex.com/add_code">submit it here</a>`;
+  const addCodeURL = new URL("https://www.catalyzex.com/add_code");
+  addCodeURL.searchParams.set('title', paperTitle);
+  addCodeURL.searchParams.set('paper_url', paperUrl);
+
+  const submitItHereLink = `<a target="_blank" href="${addCodeURL}">submit it here</a>`;
 
   if (implementations) {
     const codeLink = $(`<a target="_blank"></a>`);
