@@ -13,7 +13,7 @@ $(document).ready(function() {
 
   var scripts = {
     "paperwithcode": $('#paperwithcode-toggle').data('script-url') + "?20210727",
-    "catalyzex": $('#catalyzex-toggle').data('script-url') + "?20221121",
+    "catalyzex": $('#catalyzex-toggle').data('script-url'),
     "replicate": $('#replicate-toggle').data('script-url'),
     "spaces": $('#spaces-toggle').data('script-url'),
     "dagshub": $('#dagshub-toggle').data('script-url'),
