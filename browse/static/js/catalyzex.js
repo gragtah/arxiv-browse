@@ -57,6 +57,8 @@
       .append(codeLink)
   } else {
     $output.append(`<p>No code found for this paper just yet.</p>`)
+    const relatedCodeURL = `https://www.catalyzex.com/paper/arxiv:${arxivId}/code/related`
+    $output.append(`<p>See <a target="_blank" href="${relatedCodeURL}" style="font-weight:bold">code for related papers</a>.</p>`)
   }
   $output.append(`<p>If you have code to share with the arXiv community, please ${submitItHereLink} to benefit all researchers & engineers.</p>`)
 })();
