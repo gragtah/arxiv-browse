@@ -32,6 +32,21 @@
     return result;
   };
 
+  const fetchRelatedPapersWithCode = async () => {
+    const cxRelatedCodeApi = new URL(`https://www.catalyzex.com/api/v1/paper/arxiv:${arxivId}/code/related`);
+    if(paperTitle) cxRelatedCodeApi.searchParams.set('paper_title', paperTitle);
+
+    let result = {};
+
+    try {
+      result = await $.ajax({ url: cxRelatedCodeApi, timeout: 2000, dataType: "json" });
+    } catch (error) {
+      result = {};
+    }
+
+    return result;
+  };
+
   $output.html('');
 
   const { count: implementations, cx_url: cxImplementationsUrl } = await fetchCatalyzeXCode()
@@ -58,10 +73,13 @@
   } else {
     $output.append(`<p>No code found for this paper just yet.</p>`)
 
-    const relatedCodeURL = new URL(`https://www.catalyzex.com/paper/arxiv:${arxivId}/code/related`);
-    if(paperTitle) relatedCodeURL.searchParams.set('paperTitle', paperTitle);
-    
-    $output.append(`<p>See <a target="_blank" href="${relatedCodeURL}" style="font-weight:bold">code for related papers</a>.</p>`)
+    const { related_papers: relatedPapersWithCode } = await fetchRelatedPapersWithCode(paperTitle);
+
+    if(relatedPapersWithCode?.length > 0) {
+      const relatedCodeURL = new URL(`https://www.catalyzex.com/paper/arxiv:${arxivId}/code/related`);
+      if(paperTitle) relatedCodeURL.searchParams.set('paperTitle', paperTitle);
+      $output.append(`<p>See <a target="_blank" href="${relatedCodeURL}" style="font-weight:bold">code for related papers</a>.</p>`)
+    }
   }
   $output.append(`<p>If you have code to share with the arXiv community, please ${submitItHereLink} to benefit all researchers & engineers.</p>`)
 })();
