@@ -19,29 +19,18 @@
   }
 
   const fetchCatalyzeXCode = async () => {
-    const cxApiUrl = `https://www.catalyzex.com/api/code?src=arxiv&paper_arxiv_id=${arxivId}`;
+    const cxApiUrl = new URL("https://www.catalyzex.com/api/code");
+    cxApiUrl.searchParams.set('src', 'arxiv');
+    cxApiUrl.searchParams.set('paper_arxiv_id', arxivId);
+    cxApiUrl.searchParams.set('check_similar_results_availability', 'true');
+    if(paperTitle) cxApiUrl.searchParams.set('paper_title', encodeURIComponent(paperTitle));
 
     let result = {};
 
     try {
       result = await $.ajax({ url: cxApiUrl, timeout: 2000, dataType: "json" });
     } catch (error) {
-      result = {};
-    }
-
-    return result;
-  };
-
-  const fetchRelatedPapersWithCode = async () => {
-    const cxRelatedCodeApi = new URL(`https://www.catalyzex.com/api/v1/paper/arxiv:${arxivId}/code/related`);
-    if(paperTitle) cxRelatedCodeApi.searchParams.set('paper_title', paperTitle);
-
-    let result = {};
-
-    try {
-      result = await $.ajax({ url: cxRelatedCodeApi, timeout: 2000, dataType: "json" });
-    } catch (error) {
-      result = {};
+      result = error?.responseJSON || {};
     }
 
     return result;
@@ -49,7 +38,7 @@
 
   $output.html('');
 
-  const { count: implementations, cx_url: cxImplementationsUrl } = await fetchCatalyzeXCode()
+  const { count: implementations, cx_url: cxImplementationsUrl, similar_results_available: similarResultsAvailable } = await fetchCatalyzeXCode()
 
   $output.append("<h2>CatalyzeX</h2>");
 
@@ -73,9 +62,7 @@
   } else {
     $output.append(`<p>No code found for this paper just yet.</p>`)
 
-    const { related_papers: relatedPapersWithCode } = await fetchRelatedPapersWithCode(paperTitle);
-
-    if(relatedPapersWithCode?.length > 0) {
+    if(similarResultsAvailable) {
       const relatedCodeURL = new URL(`https://www.catalyzex.com/paper/arxiv:${arxivId}/code/related`);
       if(paperTitle) relatedCodeURL.searchParams.set('paperTitle', paperTitle);
       $output.append(`<p>See <a target="_blank" href="${relatedCodeURL}" style="font-weight:bold">code for related papers</a>.</p>`)
