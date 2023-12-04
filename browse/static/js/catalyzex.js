@@ -1,5 +1,9 @@
 (async () => {
-  const arxivId = document.head.querySelector("[name~=citation_arxiv_id][content]").content;
+  let arxivId = window.location.pathname.split('/').reverse()[0];
+  if(!arxivId) return;
+
+  arxivId = arxivId.replace(/v.*/, '') // remove version number
+
   const paperTitle = document.querySelector("h1.title")?.innerText;
   const paperUrl = window.location.href.split('?')[0];
   const $output = $("#catalyzex-output");
