@@ -41,12 +41,15 @@
   const addCodeURL = new URL("https://www.catalyzex.com/add_code");
   addCodeURL.searchParams.set('title', paperTitle);
   addCodeURL.searchParams.set('paper_url', paperUrl);
+  addCodeURL.searchParams.set('src', 'arxiv');
 
   const submitItHereLink = `<a target="_blank" href="${addCodeURL}" style="font-weight:bold">submit it here</a>`;
 
   if (implementations) {
     const codeLink = $(`<a target="_blank"></a>`);
-    codeLink.attr("href", cxImplementationsUrl);
+    const codeLinkURL = new URL(cxImplementationsUrl);
+    codeLinkURL.searchParams.set('src', 'arxiv');
+    codeLink.attr("href", codeLinkURL);
     codeLink
       .append(icons.github)
       .append(`${implementations} code implementation${implementations > 1 ? "s" : ""} found on`)
