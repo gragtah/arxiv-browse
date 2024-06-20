@@ -1,5 +1,9 @@
 (async () => {
-  const arxivId = document.head.querySelector("[name~=citation_arxiv_id][content]").content;
+  let arxivId = window.location.pathname.split('/').reverse()[0];
+  if(!arxivId) return;
+
+  arxivId = arxivId.replace(/v.*/, '') // remove version number
+
   const paperTitle = document.querySelector("h1.title")?.innerText;
   const paperUrl = window.location.href.split('?')[0];
   const $output = $("#catalyzex-output");
@@ -19,14 +23,18 @@
   }
 
   const fetchCatalyzeXCode = async () => {
-    const cxApiUrl = `https://www.catalyzex.com/api/code?src=arxiv&paper_arxiv_id=${arxivId}`;
+    const cxApiUrl = new URL("https://www.catalyzex.com/api/code");
+    cxApiUrl.searchParams.set('src', 'arxiv');
+    cxApiUrl.searchParams.set('paper_arxiv_id', arxivId);
+    cxApiUrl.searchParams.set('check_similar_results_availability', 'true');
+    if(paperTitle) cxApiUrl.searchParams.set('paper_title', encodeURIComponent(paperTitle));
 
     let result = {};
 
     try {
       result = await $.ajax({ url: cxApiUrl, timeout: 2000, dataType: "json" });
     } catch (error) {
-      result = {};
+      result = error?.responseJSON || {};
     }
 
     return result;
@@ -34,7 +42,7 @@
 
   $output.html('');
 
-  const { count: implementations, cx_url: cxImplementationsUrl } = await fetchCatalyzeXCode()
+  const { count: implementations, cx_url: cxImplementationsUrl, similar_results_available: similarResultsAvailable } = await fetchCatalyzeXCode()
 
   $output.append("<h2>CatalyzeX</h2>");
 
@@ -57,6 +65,12 @@
       .append(codeLink)
   } else {
     $output.append(`<p>No code found for this paper just yet.</p>`)
+
+    if(similarResultsAvailable) {
+      const relatedCodeURL = new URL(`https://www.catalyzex.com/paper/arxiv:${arxivId}/code/related`);
+      if(paperTitle) relatedCodeURL.searchParams.set('paperTitle', paperTitle);
+      $output.append(`<p>See <a target="_blank" href="${relatedCodeURL}" style="font-weight:bold">code for related papers</a>.</p>`)
+    }
   }
   $output.append(`<p>If you have code to share with the arXiv community, please ${submitItHereLink} to benefit all researchers & engineers.</p>`)
 })();
